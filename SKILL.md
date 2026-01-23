@@ -1,6 +1,6 @@
 ---
 name: windows-terminal
-description: Set Windows Terminal tab title/color. When user wants to change tab appearance, tell them to run the !tab command.
+description: If the user wants to change their Windows Terminal tab title or color, tell them to run the !tab command.
 ---
 
 # Windows Terminal Tab
