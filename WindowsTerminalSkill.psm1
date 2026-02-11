@@ -1,7 +1,7 @@
 # WindowsTerminalSkill - Control terminal tab title/color from child processes
 
 $script:Colors = @{
-    red = "913540"; green = "2ECC71"; blue = "3498DB"; purple = "9B59B6"
+    red = "E74C3C"; green = "2ECC71"; blue = "3498DB"; purple = "9B59B6"
     orange = "E67E22"; yellow = "F1C40F"; pink = "E91E63"; cyan = "00BCD4"
     bug = "E74C3C"; feature = "2ECC71"; research = "3498DB"; refactor = "9B59B6"
     devops = "E67E22"; test = "F1C40F";default = "20206D"
@@ -70,32 +70,17 @@ function tab {
         [Parameter(Position=0)][string]$Title,
         [Parameter(Position=1)][string]$Color = "default"
     )
-    
-    if (-not $Title) {
-        # Show usage when no parameters provided
-        Write-Host "Usage:" -ForegroundColor Cyan
-        Write-Host "  tab `"title`"              # Set tab title" -ForegroundColor White
-        Write-Host "  tab `"title`" `"color`"      # Set tab title and color" -ForegroundColor White
-        Write-Host "  tab --reset               # Reset to spawn title and default color" -ForegroundColor White
-        Write-Host "" 
-        Write-Host "Available colors: red, green, blue, purple, orange, yellow, pink, cyan, default" -ForegroundColor Gray
-        Write-Host "Or use hex colors like: #FF5733" -ForegroundColor Gray
-        return
-    }
-    
-    if ($Title -eq "--reset") {
-        # Reset tab to spawn title and default color
-        $spawnTitle = Get-SpawnTitle
-        Set-TerminalDirect -Title $spawnTitle -Color "default"
+    if ($Title) { 
+        Set-TerminalDirect -Title $Title -Color $Color
         Write-Host ""  # newline after the escape sequence
-        Write-Host "Tab reset to spawn title: $spawnTitle" -ForegroundColor Green
-        return
+        Write-Host "Tab: $Title" -ForegroundColor DarkGray
+    } else {
+        # If no title provided, reset to spawn title
+        $spawnTitle = Get-SpawnTitle
+        Set-TerminalDirect -Title $spawnTitle -Color $Color
+        Write-Host ""  # newline after the escape sequence
+        Write-Host "Tab reset to spawn title: $spawnTitle" -ForegroundColor DarkGray
     }
-    
-    # Set custom title and color
-    Set-TerminalDirect -Title $Title -Color $Color
-    Write-Host ""  # newline after the escape sequence
-    Write-Host "Tab: $Title" -ForegroundColor DarkGray
 }
 
 function Reset-TabTitle {
