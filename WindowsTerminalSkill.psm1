@@ -70,16 +70,28 @@ function tab {
         [Parameter(Position=0)][string]$Title,
         [Parameter(Position=1)][string]$Color = "default"
     )
-    if ($Title) { 
-        Set-TerminalDirect -Title $Title -Color $Color
-        Write-Host ""  # newline after the escape sequence
-        Write-Host "Tab: $Title" -ForegroundColor DarkGray
-    } else {
-        # If no title provided, reset to spawn title
+    if ($Title -eq "--reset") {
+        # Reset to spawn title
         $spawnTitle = Get-SpawnTitle
         Set-TerminalDirect -Title $spawnTitle -Color $Color
         Write-Host ""  # newline after the escape sequence
         Write-Host "Tab reset to spawn title: $spawnTitle" -ForegroundColor DarkGray
+    } elseif ($Title) {
+        # Set the specified title
+        Set-TerminalDirect -Title $Title -Color $Color
+        Write-Host ""  # newline after the escape sequence
+        Write-Host "Tab: $Title" -ForegroundColor DarkGray
+    } else {
+        # Show usage when no title provided
+        Write-Host "Usage: tab <title> [color]" -ForegroundColor Yellow
+        Write-Host "       tab --reset [color]" -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "Examples:" -ForegroundColor Cyan
+        Write-Host "  tab 'My Project'" -ForegroundColor Gray
+        Write-Host "  tab 'Build Process' red" -ForegroundColor Gray
+        Write-Host "  tab --reset" -ForegroundColor Gray
+        Write-Host ""
+        Write-Host "Available colors: $($script:Colors.Keys -join ', ')" -ForegroundColor DarkGray
     }
 }
 
