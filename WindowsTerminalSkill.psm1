@@ -4,7 +4,7 @@ $script:Colors = @{
     red = "E74C3C"; green = "2ECC71"; blue = "3498DB"; purple = "9B59B6"
     orange = "E67E22"; yellow = "F1C40F"; pink = "E91E63"; cyan = "00BCD4"
     bug = "E74C3C"; feature = "2ECC71"; research = "3498DB"; refactor = "9B59B6"
-    devops = "E67E22"; test = "F1C40F";default = "20206D"
+    devops = "E67E22"; test = "F1C40F";default = "012456"
 }
 
 # Store the original spawn title when module is loaded
@@ -73,9 +73,12 @@ function tab {
     if ($Title -eq "--reset") {
         # Reset to spawn title
         $spawnTitle = Get-SpawnTitle
-        Set-TerminalDirect -Title $spawnTitle -Color $Color
+        # Use red color for Admin sessions, otherwise use specified color
+        $resetColor = if ($spawnTitle -match "Admin") { "red" } else { $Color }
+        Set-TerminalDirect -Title $spawnTitle -Color $resetColor
         Write-Host ""  # newline after the escape sequence
-        Write-Host "Tab reset to spawn title: $spawnTitle" -ForegroundColor DarkGray
+        $colorNote = if ($spawnTitle -match "Admin") { " (Admin session - red)" } else { "" }
+        Write-Host "Tab reset to spawn title: $spawnTitle$colorNote" -ForegroundColor DarkGray
     } elseif ($Title) {
         # Set the specified title
         Set-TerminalDirect -Title $Title -Color $Color
